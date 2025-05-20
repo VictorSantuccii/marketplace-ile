@@ -1,102 +1,716 @@
-import Image from "next/image";
+'use client';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
-export default function Home() {
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+};
+
+const products: Product[] = [
+
+    {
+    id: 1,
+    name: 'Abebé de Oxum',
+    description: 'Espelho sagrado com cabo ornamentado em dourado, utilizado em oferendas e rituais para Oxum. Produzido artesanalmente com materiais nobres e acabamento brilhante.',
+    price: 189.90,
+    category: 'ferramentas',
+    image: '/abebe.jpg'
+  },
+  {
+    id: 2,
+    name: 'Colar de Contas de Oxóssi',
+    description: 'Colar de contas verdes e vermelhas, 7 metros para firmeza. Tradicionalmente usado em rituais dedicados ao orixá caçador.',
+    price: 89.90,
+    category: 'vestimentas',
+    image: '/oxossicolares.jpg'
+  },
+  {
+    id: 3,
+    name: 'Pano de Costa Bordado',
+    description: 'Pano de costa bordado à mão com fios dourados, tamanho único. Peça exclusiva com símbolos sagrados.',
+    price: 179.50,
+    category: 'vestimentas',
+    image: '/pano-costa.jpg'
+  },
+  {
+    id: 4,
+    name: 'Atabaque Rum',
+    description: 'Atabaque rum artesanal em madeira de lei, couro bovino. Instrumento sagrado para toques de candomblé.',
+    price: 1200.00,
+    category: 'instrumentos',
+    image: '/atabaque.jpg'
+  },
+  {
+    id: 5,
+    name: 'Conjunto de Quartinhas',
+    description: 'Conjunto com 7 quartinhas em cerâmica para orixás. Cada peça pintada à mão com símbolos tradicionais.',
+    price: 210.00,
+    category: 'utensilios',
+    image: '/quartinha.jpg'
+  },
+  {
+    id: 6,
+    name: 'Pemba Branca',
+    description: 'Caixa com 12 pembas brancas para escritos sagrados. Material essencial para cerimônias de fundamento.',
+    price: 45.00,
+    category: 'consumiveis',
+    image: '/pembabranca.jpg'
+  },
+  {
+    id: 7,
+    name: 'Cabaça Sagrada',
+    description: 'Cabaça trabalhada para uso em rituais de fundamento. Naturalmente seca e preparada por sacerdotes.',
+    price: 135.00,
+    category: 'utensilios',
+    image: '/cabaca.jpg'
+  },
+  {
+    id: 8,
+    name: 'Livro de Cantigas',
+    description: 'Coletânea de cantigas de Candomblé com CD incluso. Mais de 200 cantigas tradicionais com partituras.',
+    price: 75.50,
+    category: 'literatura',
+    image: '/cantigas.jpg'
+  },
+  {
+    id: 9,
+    name: 'Ervas Sagradas Kit',
+    description: 'Seleção de 7 ervas fundamentais para banhos e defumações. Coletadas e preparadas ritualisticamente.',
+    price: 65.00,
+    category: 'consumiveis',
+    image: '/ervas.jpg'
+  },
+  {
+    id: 10,
+    name: 'Pulseira de Fibra de Dendê',
+    description: 'Pulseira artesanal feita com fibra natural de dendê. Proteção e conexão com os orixás.',
+    price: 35.00,
+    category: 'vestimentas',
+    image: '/pulseira.jpg'
+  },
+  {
+    id: 11,
+    name: 'Estatueta de Exu',
+    description: 'Representação artística de Exu em madeira entalhada. Peça decorativa consagrada.',
+    price: 185.00,
+    category: 'ferramentas',
+    image: '/estatueta.jpeg'
+  },
+  {
+    id: 12,
+    name: 'Jogo de Búzios',
+    description: 'Conjunto completo de 16 búzios para jogo de adivinhação. Preparado por babalorixá.',
+    price: 220.00,
+    category: 'ferramentas',
+    image: '/buzios.jpg'
+  },
+];
+
+const categories = [
+  { id: 'all', name: 'Todos' },
+  { id: 'ferramentas', name: 'Ferramentas' },
+  { id: 'vestimentas', name: 'Vestimentas' },
+  { id: 'instrumentos', name: 'Instrumentos' },
+  { id: 'utensilios', name: 'Utensílios' },
+  { id: 'consumiveis', name: 'Consumíveis' },
+  { id: 'literatura', name: 'Literatura' },
+];
+
+const sortOptions = [
+  { id: 'price-asc', name: 'Menor preço' },
+  { id: 'price-desc', name: 'Maior preço' },
+  { id: 'name-asc', name: 'Nome (A-Z)' },
+  { id: 'name-desc', name: 'Nome (Z-A)' },
+];
+
+export default function Marketplace() {
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [sortOption, setSortOption] = useState<string>('name-asc');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    let result = [...products];
+
+    if (selectedCategory !== 'all') {
+      result = result.filter(product => product.category === selectedCategory);
+    }
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(term) || 
+        product.description.toLowerCase().includes(term)
+      );
+    }
+
+    switch (sortOption) {
+      case 'price-asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'name-asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        break;
+    }
+
+    setFilteredProducts(result);
+  }, [selectedCategory, sortOption, searchTerm]);
+
+  const handleAddToCart = () => {
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-emerald-50 flex items-center justify-center">
+        <motion.div
+          animate={{ 
+            rotate: 360,
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ 
+            repeat: Infinity,
+            duration: 2,
+            ease: "linear"
+          }}
+          className="w-20 h-20 bg-emerald-600 rounded-full flex items-center justify-center"
+        >
+          <motion.div
+            animate={{ scale: [1, 0.8, 1] }}
+            transition={{ 
+              repeat: Infinity,
+              duration: 1.5,
+              ease: "easeInOut",
+              repeatType: "reverse"
+            }}
+            className="w-12 h-12 bg-emerald-100 rounded-full"
+          />
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-emerald-100">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative bg-gradient-to-r from-emerald-800 to-emerald-600 text-white py-24 px-4 shadow-lg"
+      >
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="inline-block mb-6"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="w-16 h-16 bg-amber-400 rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-10 h-10 text-emerald-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 100 }}
+            className="text-4xl md:text-6xl font-bold mb-4 font-serif"
           >
-            Read our docs
-          </a>
+            Ilê Conecta
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 100, delay: 0.2 }}
+            className="text-xl md:text-2xl max-w-3xl mx-auto mb-8"
+          >
+            Conectando tradição e espiritualidade através de itens sagrados
+          </motion.p>
+          
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 bg-amber-400 text-emerald-900 font-poppins font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
+            >
+              Explorar Itens Sagrados
+            </motion.button>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.6 }}
+          className="absolute bottom-0 left-0 right-0 flex justify-center"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <motion.svg 
+            animate={{ y: [0, 10, 0] }}
+            transition={{ 
+              repeat: Infinity,
+              duration: 2,
+              ease: "easeInOut"
+            }}
+            className="w-16 h-16 text-amber-300" 
+            fill="currentColor" 
+            viewBox="0 0 20 20"
+          >
+            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+          </motion.svg>
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.1 }}
+          transition={{ delay: 0.8 }}
+          className="absolute inset-0 overflow-hidden"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div className="absolute top-0 left-0 w-32 h-32 bg-amber-300 rounded-full filter blur-3xl opacity-30 mix-blend-multiply"></div>
+          <div className="absolute bottom-0 right-0 w-48 h-48 bg-emerald-400 rounded-full filter blur-3xl opacity-30 mix-blend-multiply"></div>
+        </motion.div>
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-12 bg-white rounded-xl shadow-lg p-6 border border-emerald-100"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          <h2 className="text-2xl font-semibold text-center mb-2 text-emerald-900 mb-6 font-serif">Encontre o que precisa</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label htmlFor="search" className="block text-sm font-medium text-gray-900 mb-1">
+                Buscar
+              </label>
+              <motion.div whileHover={{ scale: 1.01 }}>
+                <input
+                  type="text"
+                  id="search"
+                  placeholder="O que você procura?"
+                  className="w-full px-4 py-3 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-800"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </motion.div>
+            </div>
+            
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-900 mb-1">
+                Categoria
+              </label>
+              <motion.div whileHover={{ scale: 1.01 }}>
+                <select
+                  id="category"
+                  className="w-full px-4 py-3 border font-poppins border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-800"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+            </div>
+            
+            <div>
+              <label htmlFor="sort" className="block text-sm font-medium text-gray-900 mb-1">
+                Ordenar por
+              </label>
+              <motion.div whileHover={{ scale: 1.01 }}>
+                <select
+                  id="sort"
+                  className="w-full px-4 py-3 border border-emerald-200 rounded-lg font-poppins focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-800"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        {filteredProducts.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16 bg-white rounded-xl shadow-md p-8"
+          >
+            <div className="w-24 h-24 mx-auto mb-6">
+              <svg className="w-full h-full text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 className="text-2xl font-medium text-emerald-900 mb-2">Nenhum produto encontrado</h3>
+            <p className="text-emerald-700 mb-6">Tente ajustar seus filtros de busca</p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSelectedCategory('all');
+                setSearchTerm('');
+                setSortOption('name-asc');
+              }}
+              className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            >
+              Limpar filtros
+            </motion.button>
+          </motion.div>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
+            {filteredProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -8 }}
+                whileTap={{ scale: 0.98 }}
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-emerald-50"
+              >
+                <div className="relative h-60 bg-emerald-100 group">
+                  <Image 
+                    src={product.image} 
+                    alt={product.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-t from-emerald-900/70 to-transparent flex items-end p-4"
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedProduct(product)}
+                      className="w-full py-2 bg-amber-400 font-poppins text-emerald-900 font-medium rounded-lg"
+                    >
+                      Ver detalhes
+                    </motion.button>
+                  </motion.div>
+                </div>
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-semibold text-emerald-900">{product.name}</h3>
+                    <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-1 rounded-full">
+                      {categories.find(c => c.id === product.category)?.name}
+                    </span>
+                  </div>
+                  <p className="text-sm text-emerald-700 mb-4">{product.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xl font-bold text-emerald-900">
+                      {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </span>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setSelectedProduct(product);
+                        setQuantity(1);
+                      }}
+                      className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
+                    >
+                      Adicionar
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+
+      {selectedProduct && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedProduct(null)}
+        >
+          <motion.div 
+            initial={{ scale: 0.9, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative">
+              <button 
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors"
+              >
+                <svg className="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+                <div className="relative h-80 md:h-full rounded-lg overflow-hidden bg-emerald-100">
+                  <Image 
+                    src={selectedProduct.image} 
+                    alt={selectedProduct.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="opacity-90 hover:opacity-100 transition-opacity duration-300"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between items-start mb-4">
+                    <h2 className="text-2xl font-bold text-emerald-900">{selectedProduct.name}</h2>
+                    <span className="bg-emerald-100 text-emerald-800 text-sm font-semibold px-3 py-1 rounded-full">
+                      {categories.find(c => c.id === selectedProduct.category)?.name}
+                    </span>
+                  </div>
+                  <p className="text-emerald-700 mb-6">{selectedProduct.description}</p>
+                  
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-emerald-900 mb-2">Detalhes</h3>
+                    <ul className="space-y-2 text-emerald-700">
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-amber-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Produto artesanal feito à mão
+                      </li>
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-amber-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Consagrado ritualisticamente
+                      </li>
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-amber-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Envio seguro e discreto
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-3xl font-bold text-emerald-900">
+                      {selectedProduct.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                    </span>
+                    <div className="flex items-center space-x-2">
+                      <button 
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
+                        </svg>
+                      </button>
+                      <span className="w-12 text-center font-medium">{quantity}</span>
+                      <button 
+                        onClick={() => setQuantity(quantity + 1)}
+                        className="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleAddToCart}
+                    className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center justify-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Adicionar ao carrinho
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {showAlert && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-8 right-8 z-50"
+        >
+          <div className="bg-emerald-600 text-white px-6 py-4 rounded-lg shadow-xl flex items-center">
+            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Item adicionado ao carrinho com sucesso!</span>
+          </div>
+        </motion.div>
+      )}
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="bg-emerald-800 text-white py-16 px-4"
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4 font-serif">Junte-se à nossa comunidade</h2>
+          <p className="text-emerald-100 mb-8 max-w-2xl mx-auto">
+            Receba novidades, conteúdos exclusivos e ofertas especiais diretamente no seu e-mail.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <input 
+              type="email" 
+              placeholder="Seu melhor e-mail" 
+              className="flex-grow px-4 py-3 rounded-lg text-emerald-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-6 py-3 bg-amber-400 text-emerald-900 font-medium font-poppins rounded-lg hover:bg-amber-300 transition-colors"
+            >
+              Assinar
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+
+      <footer className="bg-emerald-900 text-emerald-50 pt-16 pb-8 px-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4 flex items-center">
+              <span className="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center mr-2">
+                <svg className="w-4 h-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                </svg>
+              </span>
+              Ilê Conecta
+            </h3>
+            <p className="text-emerald-200 font-poppins mb-4">
+              Conectando tradições e fortalecendo a comunidade de Candomblé.
+            </p>
+            <div className="flex space-x-4">
+              {['facebook', 'instagram', 'whatsapp'].map((social) => (
+                <motion.a 
+                  key={social}
+                  whileHover={{ y: -3 }}
+                  href="#" 
+                  className="w-10 h-10 bg-emerald-800 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors"
+                >
+                  <span className="sr-only">{social}</span>
+                  <svg className="w-5 h-5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+                    <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                  </svg>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Produtos</h4>
+            <ul className="space-y-2">
+              {categories.slice(1).map((category) => (
+                <motion.li 
+                  key={category.id}
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="#" className="text-emerald-200 hover:text-amber-300 transition-colors">{category.name}</a>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Institucional</h4>
+            <ul className="space-y-2">
+              {['Sobre nós', 'Nossa história', 'Termos de serviço', 'Política de privacidade'].map((item) => (
+                <motion.li 
+                  key={item}
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="#" className="text-emerald-200 hover:text-amber-300 transition-colors">{item}</a>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Contato</h4>
+            <address className="not-italic text-emerald-200 space-y-2">
+              <motion.div whileHover={{ x: 5 }} className="flex items-start">
+                <svg className="w-5 h-5 text-amber-300 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                <a href="mailto:contato@ileconecta.com" className="hover:text-amber-300 transition-colors">contato@ileconecta.com</a>
+              </motion.div>
+              
+              <motion.div whileHover={{ x: 5 }} className="flex items-start">
+                <svg className="w-5 h-5 text-amber-300 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                <a href="tel:+5571987654321" className="hover:text-amber-300 transition-colors">(71) 98765-4321</a>
+              </motion.div>
+              
+              <motion.div whileHover={{ x: 5 }} className="flex items-start">
+                <svg className="w-5 h-5 text-amber-300 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                <span>Salvador - BA</span>
+              </motion.div>
+            </address>
+          </div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-emerald-800 text-center text-emerald-300">
+          <p>&copy; {new Date().getFullYear()} Ilê Conecta. Todos os direitos reservados.</p>
+          <p className="mt-2 text-sm">Respeitamos e valorizamos as tradições do Candomblé.</p>
+        </div>
       </footer>
     </div>
   );
