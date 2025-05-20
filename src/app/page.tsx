@@ -262,7 +262,7 @@ export default function Marketplace() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-amber-400 text-emerald-900 font-poppins font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
+              className="px-8 py-3 bg-amber-400 text-emerald-900 font-poppins font-light rounded-lg shadow-md hover:shadow-lg transition-all"
             >
               Explorar Itens Sagrados
             </motion.button>
@@ -334,7 +334,7 @@ export default function Marketplace() {
               <motion.div whileHover={{ scale: 1.01 }}>
                 <select
                   id="category"
-                  className="w-full px-4 py-3 border font-poppins border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-800"
+                  className="w-full px-4 py-3 border font-poppins font-light border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-800"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -428,7 +428,7 @@ export default function Marketplace() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSelectedProduct(product)}
-                      className="w-full py-2 bg-amber-400 font-poppins text-emerald-900 font-medium rounded-lg"
+                      className="w-full py-2 bg-amber-400 font-poppins text-emerald-900 font-light rounded-lg"
                     >
                       Ver detalhes
                     </motion.button>
@@ -611,7 +611,14 @@ export default function Marketplace() {
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="px-6 py-3 bg-amber-400 text-emerald-900 font-medium font-poppins rounded-lg hover:bg-amber-300 transition-colors"
+              className="px-6 py-3 bg-amber-400 text-emerald-900 font-light font-poppins rounded-lg hover:bg-amber-300 transition-colors"
+            >
+              Inscrever
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-6 py-3 bg-amber-400 text-emerald-900 font-light font-poppins rounded-lg hover:bg-amber-300 transition-colors"
             >
               Assinar
             </motion.button>
