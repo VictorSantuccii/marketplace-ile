@@ -13,8 +13,7 @@ type Product = {
 };
 
 const products: Product[] = [
-
-    {
+  {
     id: 1,
     name: 'Abebé de Oxum',
     description: 'Espelho sagrado com cabo ornamentado em dourado, utilizado em oferendas e rituais para Oxum. Produzido artesanalmente com materiais nobres e acabamento brilhante.',
@@ -180,6 +179,7 @@ export default function Marketplace() {
   }, [selectedCategory, sortOption, searchTerm]);
 
   const handleAddToCart = () => {
+    window.open('https://www.instagram.com/atelie_scheillasol', '_blank');
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   };
@@ -455,7 +455,7 @@ export default function Marketplace() {
                       }}
                       className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
                     >
-                      Adicionar
+                      Detalhes
                     </motion.button>
                   </div>
                 </div>
@@ -562,10 +562,10 @@ export default function Marketplace() {
                     onClick={handleAddToCart}
                     className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center justify-center"
                   >
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                     </svg>
-                    Adicionar ao carrinho
+                    Comprar no Instagram
                   </motion.button>
                 </div>
               </div>
@@ -585,7 +585,7 @@ export default function Marketplace() {
             <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
             </svg>
-            <span>Item adicionado ao carrinho com sucesso!</span>
+            <span>Você está sendo redirecionado para nosso Instagram!</span>
           </div>
         </motion.div>
       )}
@@ -672,19 +672,7 @@ export default function Marketplace() {
             </ul>
           </div>
           
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Institucional</h4>
-            <ul className="space-y-2">
-              {['Sobre nós', 'Nossa história', 'Termos de serviço', 'Política de privacidade'].map((item) => (
-                <motion.li 
-                  key={item}
-                  whileHover={{ x: 5 }}
-                >
-                  <a href="#" className="text-emerald-200 hover:text-amber-300 transition-colors">{item}</a>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
+         
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Contato</h4>
@@ -708,7 +696,7 @@ export default function Marketplace() {
                 <svg className="w-5 h-5 text-amber-300 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
-                <span>Salvador - BA</span>
+                <span>Itabuna - BA</span>
               </motion.div>
             </address>
           </div>
