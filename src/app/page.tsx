@@ -7,7 +7,6 @@ type Product = {
   id: number;
   name: string;
   description: string;
-  price: number;
   category: string;
   image: string;
 };
@@ -17,7 +16,6 @@ const products: Product[] = [
     id: 1,
     name: 'Abebé de Oxum',
     description: 'Espelho sagrado com cabo ornamentado em dourado, utilizado em oferendas e rituais para Oxum. Produzido artesanalmente com materiais nobres e acabamento brilhante.',
-    price: 189.90,
     category: 'ferramentas',
     image: '/abebe.jpg'
   },
@@ -25,7 +23,6 @@ const products: Product[] = [
     id: 2,
     name: 'Colar de Contas de Oxóssi',
     description: 'Colar de contas verdes e vermelhas, 7 metros para firmeza. Tradicionalmente usado em rituais dedicados ao orixá caçador.',
-    price: 89.90,
     category: 'vestimentas',
     image: '/oxossicolares.jpg'
   },
@@ -33,7 +30,6 @@ const products: Product[] = [
     id: 3,
     name: 'Pano de Costa Bordado',
     description: 'Pano de costa bordado à mão com fios dourados, tamanho único. Peça exclusiva com símbolos sagrados.',
-    price: 179.50,
     category: 'vestimentas',
     image: '/pano-costa.jpg'
   },
@@ -41,7 +37,6 @@ const products: Product[] = [
     id: 4,
     name: 'Atabaque Rum',
     description: 'Atabaque rum artesanal em madeira de lei, couro bovino. Instrumento sagrado para toques de candomblé.',
-    price: 1200.00,
     category: 'instrumentos',
     image: '/atabaque.jpg'
   },
@@ -49,7 +44,6 @@ const products: Product[] = [
     id: 5,
     name: 'Conjunto de Quartinhas',
     description: 'Conjunto com 7 quartinhas em cerâmica para orixás. Cada peça pintada à mão com símbolos tradicionais.',
-    price: 210.00,
     category: 'utensilios',
     image: '/quartinha.jpg'
   },
@@ -57,7 +51,6 @@ const products: Product[] = [
     id: 6,
     name: 'Pemba Branca',
     description: 'Caixa com 12 pembas brancas para escritos sagrados. Material essencial para cerimônias de fundamento.',
-    price: 45.00,
     category: 'consumiveis',
     image: '/pembabranca.jpg'
   },
@@ -65,7 +58,6 @@ const products: Product[] = [
     id: 7,
     name: 'Cabaça Sagrada',
     description: 'Cabaça trabalhada para uso em rituais de fundamento. Naturalmente seca e preparada por sacerdotes.',
-    price: 135.00,
     category: 'utensilios',
     image: '/cabaca.jpg'
   },
@@ -73,7 +65,6 @@ const products: Product[] = [
     id: 8,
     name: 'Livro de Cantigas',
     description: 'Coletânea de cantigas de Candomblé com CD incluso. Mais de 200 cantigas tradicionais com partituras.',
-    price: 75.50,
     category: 'literatura',
     image: '/cantigas.jpg'
   },
@@ -81,7 +72,6 @@ const products: Product[] = [
     id: 9,
     name: 'Ervas Sagradas Kit',
     description: 'Seleção de 7 ervas fundamentais para banhos e defumações. Coletadas e preparadas ritualisticamente.',
-    price: 65.00,
     category: 'consumiveis',
     image: '/ervas.jpg'
   },
@@ -89,7 +79,6 @@ const products: Product[] = [
     id: 10,
     name: 'Pulseira de Fibra de Dendê',
     description: 'Pulseira artesanal feita com fibra natural de dendê. Proteção e conexão com os orixás.',
-    price: 35.00,
     category: 'vestimentas',
     image: '/pulseira.jpg'
   },
@@ -97,7 +86,6 @@ const products: Product[] = [
     id: 11,
     name: 'Estatueta de Exu',
     description: 'Representação artística de Exu em madeira entalhada. Peça decorativa consagrada.',
-    price: 185.00,
     category: 'ferramentas',
     image: '/estatueta.jpeg'
   },
@@ -105,10 +93,13 @@ const products: Product[] = [
     id: 12,
     name: 'Jogo de Búzios',
     description: 'Conjunto completo de 16 búzios para jogo de adivinhação. Preparado por babalorixá.',
-    price: 220.00,
     category: 'ferramentas',
     image: '/buzios.jpg'
-  },
+  }
+ 
+
+
+ 
 ];
 
 const categories = [
@@ -119,11 +110,13 @@ const categories = [
   { id: 'utensilios', name: 'Utensílios' },
   { id: 'consumiveis', name: 'Consumíveis' },
   { id: 'literatura', name: 'Literatura' },
+  { id: 'artesanato', name: 'Artesanato' },
+  { id: 'acessorios', name: 'Acessórios' },
+  { id: 'decoracao', name: 'Decoração' },
+  { id: 'utilidades', name: 'Utilidades' }
 ];
 
 const sortOptions = [
-  { id: 'price-asc', name: 'Menor preço' },
-  { id: 'price-desc', name: 'Maior preço' },
   { id: 'name-asc', name: 'Nome (A-Z)' },
   { id: 'name-desc', name: 'Nome (Z-A)' },
 ];
@@ -135,7 +128,6 @@ export default function Marketplace() {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
   useEffect(() => {
@@ -159,12 +151,6 @@ export default function Marketplace() {
     }
 
     switch (sortOption) {
-      case 'price-asc':
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        result.sort((a, b) => b.price - a.price);
-        break;
       case 'name-asc':
         result.sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -179,7 +165,7 @@ export default function Marketplace() {
   }, [selectedCategory, sortOption, searchTerm]);
 
   const handleAddToCart = () => {
-    window.open('https://www.instagram.com/atelie_scheillasol', '_blank');
+    window.open('https://www.instagram.com/casadaspembas1/', '_blank');
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   };
@@ -443,19 +429,15 @@ export default function Marketplace() {
                   </div>
                   <p className="text-sm text-emerald-700 mb-4">{product.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-emerald-900">
-                      {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </span>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => {
                         setSelectedProduct(product);
-                        setQuantity(1);
                       }}
                       className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
                     >
-                      Detalhes
+                      Ver no Instagram
                     </motion.button>
                   </div>
                 </div>
@@ -531,31 +513,6 @@ export default function Marketplace() {
                     </ul>
                   </div>
                   
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-3xl font-bold text-emerald-900">
-                      {selectedProduct.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      <button 
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
-                        </svg>
-                      </button>
-                      <span className="w-12 text-center font-medium">{quantity}</span>
-                      <button 
-                        onClick={() => setQuantity(quantity + 1)}
-                        className="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -589,42 +546,6 @@ export default function Marketplace() {
           </div>
         </motion.div>
       )}
-
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="bg-emerald-800 text-white py-16 px-4"
-      >
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4 font-serif">Junte-se à nossa comunidade</h2>
-          <p className="text-emerald-100 mb-8 max-w-2xl mx-auto">
-            Receba novidades, conteúdos exclusivos e ofertas especiais diretamente no seu e-mail.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input 
-              type="email" 
-              placeholder="Seu melhor e-mail" 
-              className="flex-grow px-4 py-3 rounded-lg text-emerald-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
-            />
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-6 py-3 bg-amber-400 text-emerald-900 font-light font-poppins rounded-lg hover:bg-amber-300 transition-colors"
-            >
-              Inscrever
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-6 py-3 bg-amber-400 text-emerald-900 font-light font-poppins rounded-lg hover:bg-amber-300 transition-colors"
-            >
-              Assinar
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
 
       <footer className="bg-emerald-900 text-emerald-50 pt-16 pb-8 px-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
