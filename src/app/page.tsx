@@ -9,6 +9,7 @@ type Product = {
   description: string;
   category: string;
   image: string;
+  instagramLink: string;
 };
 
 const products: Product[] = [
@@ -17,89 +18,129 @@ const products: Product[] = [
     name: 'Abebé de Oxum',
     description: 'Espelho sagrado com cabo ornamentado em dourado, utilizado em oferendas e rituais para Oxum. Produzido artesanalmente com materiais nobres e acabamento brilhante.',
     category: 'ferramentas',
-    image: '/abebe.jpg'
+    image: '/abebe.jpg',
+    instagramLink: 'https://www.instagram.com/atelie_omi/'
   },
   {
     id: 2,
     name: 'Colar de Contas de Oxóssi',
     description: 'Colar de contas verdes e vermelhas, 7 metros para firmeza. Tradicionalmente usado em rituais dedicados ao orixá caçador.',
     category: 'vestimentas',
-    image: '/oxossicolares.jpg'
+    image: '/oxossicolares.jpg',
+    instagramLink: 'https://www.instagram.com/atelie_scheillasol/'
   },
   {
     id: 3,
     name: 'Pano de Costa Bordado',
     description: 'Pano de costa bordado à mão com fios dourados, tamanho único. Peça exclusiva com símbolos sagrados.',
     category: 'vestimentas',
-    image: '/pano-costa.jpg'
+    image: '/pano-costa.jpg',
+    instagramLink: 'https://www.instagram.com/atelie.oparun/'
   },
   {
     id: 4,
     name: 'Atabaque Rum',
     description: 'Atabaque rum artesanal em madeira de lei, couro bovino. Instrumento sagrado para toques de candomblé.',
     category: 'instrumentos',
-    image: '/atabaque.jpg'
+    image: '/atabaque.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 5,
     name: 'Conjunto de Quartinhas',
     description: 'Conjunto com 7 quartinhas em cerâmica para orixás. Cada peça pintada à mão com símbolos tradicionais.',
     category: 'utensilios',
-    image: '/quartinha.jpg'
+    image: '/quartinha.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 6,
     name: 'Pemba Branca',
     description: 'Caixa com 12 pembas brancas para escritos sagrados. Material essencial para cerimônias de fundamento.',
     category: 'consumiveis',
-    image: '/pembabranca.jpg'
+    image: '/pembabranca.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 7,
     name: 'Cabaça Sagrada',
     description: 'Cabaça trabalhada para uso em rituais de fundamento. Naturalmente seca e preparada por sacerdotes.',
     category: 'utensilios',
-    image: '/cabaca.jpg'
+    image: '/cabaca.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 8,
     name: 'Livro de Cantigas',
     description: 'Coletânea de cantigas de Candomblé com CD incluso. Mais de 200 cantigas tradicionais com partituras.',
     category: 'literatura',
-    image: '/cantigas.jpg'
+    image: '/cantigas.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 9,
     name: 'Ervas Sagradas Kit',
     description: 'Seleção de 7 ervas fundamentais para banhos e defumações. Coletadas e preparadas ritualisticamente.',
     category: 'consumiveis',
-    image: '/ervas.jpg'
+    image: '/ervas.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 10,
     name: 'Pulseira de Fibra de Dendê',
     description: 'Pulseira artesanal feita com fibra natural de dendê. Proteção e conexão com os orixás.',
     category: 'vestimentas',
-    image: '/pulseira.jpg'
+    image: '/pulseira.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 11,
     name: 'Estatueta de Exu',
     description: 'Representação artística de Exu em madeira entalhada. Peça decorativa consagrada.',
     category: 'ferramentas',
-    image: '/estatueta.jpeg'
+    image: '/estatueta.jpeg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   },
   {
     id: 12,
     name: 'Jogo de Búzios',
     description: 'Conjunto completo de 16 búzios para jogo de adivinhação. Preparado por babalorixá.',
     category: 'ferramentas',
-    image: '/buzios.jpg'
+    image: '/buzios.jpg',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
+  },
+  {
+    id: 13,
+    name: 'Adê de Xangô',
+    description: 'Coroa sagrada para Xangô em miçangas vermelhas e brancas. Peça artesanal feita à mão.',
+    category: 'vestimentas',
+    image: '/adexango.jpg',
+    instagramLink: 'https://www.instagram.com/atelie_omi/'
+  },
+  {
+    id: 14,
+    name: 'Sistema de Ibejis',
+    description: 'Conjunto completo para Ibejis com 2 imagens, roupas e utensílios. Ideal para assentamento.',
+    category: 'ferramentas',
+    image: '/assentamento.jpg',
+    instagramLink: 'https://www.instagram.com/atelie_scheillasol/'
+  },
+  {
+    id: 15,
+    name: 'Incensário de Bronze',
+    description: 'Incensário ritualístico em bronze com detalhes gravados. Para defumações e cerimônias.',
+    category: 'utensilios',
+    image: '/incensario.jpg',
+    instagramLink: 'https://www.instagram.com/atelie.oparun/'
+  },
+  {
+    id: 16,
+    name: 'Agogô Sagrado',
+    description: 'Instrumento musical ritualístico em metal. Essencial para toques de candomblé.',
+    category: 'instrumentos',
+    image: '/agogo.png',
+    instagramLink: 'https://www.instagram.com/casadaspembas1/'
   }
- 
-
-
- 
 ];
 
 const categories = [
@@ -164,8 +205,8 @@ export default function Marketplace() {
     setFilteredProducts(result);
   }, [selectedCategory, sortOption, searchTerm]);
 
-  const handleAddToCart = () => {
-    window.open('https://www.instagram.com/casadaspembas1/', '_blank');
+  const handleAddToCart = (link: string) => {
+    window.open(link, '_blank');
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
   };
@@ -432,12 +473,10 @@ export default function Marketplace() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        setSelectedProduct(product);
-                      }}
+                      onClick={() => handleAddToCart(product.instagramLink)}
                       className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
                     >
-                      Ver no Instagram
+                      Comprar no Instagram
                     </motion.button>
                   </div>
                 </div>
@@ -516,7 +555,7 @@ export default function Marketplace() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={handleAddToCart}
+                    onClick={() => handleAddToCart(selectedProduct.instagramLink)}
                     className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center justify-center"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -580,6 +619,31 @@ export default function Marketplace() {
           </div>
           
           <div>
+            <h4 className="text-lg font-semibold mb-4">Produtos</h4>
+            <ul className="space-y-2">
+              {categories.slice(1).map((category) => (
+                <motion.li 
+                  key={category.id}
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="#" className="text-emerald-200 hover:text-amber-300 transition-colors">{category.name}</a>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Links Úteis</h4>
+            <ul className="space-y-2">
+              {['Sobre nós', 'Termos de serviço', 'Política de privacidade', 'FAQ'].map((item) => (
+                <motion.li key={item} whileHover={{ x: 5 }}>
+                  <a href="#" className="text-emerald-200 hover:text-amber-300 transition-colors">{item}</a>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+          
+           <div>
             <h4 className="text-lg font-semibold mb-4">Produtos</h4>
             <ul className="space-y-2">
               {categories.slice(1).map((category) => (
